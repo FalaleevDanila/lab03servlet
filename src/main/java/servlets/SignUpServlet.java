@@ -3,6 +3,8 @@ package servlets;
 import accounts.AccountService;
 import accounts.UserProfile;
 import com.google.gson.Gson;
+import dbService.DBException;
+import dbService.DBService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +15,12 @@ import java.io.IOException;
 
 public class SignUpServlet extends HttpServlet {
 
-    private final AccountService accountService;
+    //private final AccountService accountService;
 
-    public SignUpServlet(AccountService accountService) {
-        this.accountService = accountService;
+    private final DBService dbService;
+
+    public SignUpServlet(DBService dbService) {
+        this.dbService = dbService;
     }
 
     //get public user profile
@@ -32,13 +36,17 @@ public class SignUpServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        UserProfile prof = new UserProfile(login,pass,pass);
+        //UserProfile prof = new UserProfile(login,pass,pass);
 
-        if (prof == null) {
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        } else {
-            accountService.addNewUser(prof);
+        //if (prof == null) {
+            //response.setContentType("text/html;charset=utf-8");
+            //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        //} else {
+        try {
+            dbService.addUser(login,pass);
+        } catch (DBException e) {
+            e.printStackTrace();
         }
+        //}
     }
 }

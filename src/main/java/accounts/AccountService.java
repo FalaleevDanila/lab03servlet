@@ -21,6 +21,7 @@ public class AccountService {
     }
 
     public void addNewUser(UserProfile userProfile) {
+
         loginToProfile.put(userProfile.getLogin(), userProfile);
     }
 
